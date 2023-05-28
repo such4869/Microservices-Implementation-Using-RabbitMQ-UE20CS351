@@ -1,0 +1,57 @@
+version: '3'
+services:
+  producer:
+    build: ./producer
+    ports:
+      - "5000:5000"
+    networks:
+      - brokernet
+      - micronetwork
+
+  consumer_one:
+    build: ./consumer_one
+    networks:
+      - brokernet
+      - micronetwork
+
+  consumer_two:
+    build: ./consumer_two
+    networks:
+      - brokernet
+      - micronetwork
+
+  consumer_three:
+    build: ./consumer_three
+    networks:
+      - brokernet
+      - micronetwork
+
+  consumer_four:
+    build: ./consumer_four
+    networks:
+      - brokernet
+      - micronetwork
+
+
+  database:
+    image: mongo:latest
+    container_name: database
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+    command: mongod --auth
+    networks:
+      - micronetwork
+      - brokernet
+
+
+networks:
+  micronetwork:
+    name: micronetwork
+  brokernet:
+    name: brokernet
